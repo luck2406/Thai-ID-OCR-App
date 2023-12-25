@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thai ID OCR App</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #3498db; /* Background color */
+            color: #ffffff; /* Text color */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #ffffff;
+        }
+
+        #uploadForm {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #2ecc71; /* Button color */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #27ae60; /* Button color on hover */
+        }
+
+        #output {
+            margin-top: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #555;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Thai ID OCR App</h1>
+    
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="image">Choose an image:</label>
+        <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/jpg" required>
+        <button type="button" onclick="uploadImage()">Upload</button>
+    </form>
+
+    <div id="output">
+        <h2>OCR Output</h2>
+        <pre id="jsonOutput"></pre>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function uploadImage() {
+            var formData = new FormData(document.getElementById("uploadForm"));
+
+            $.ajax({
+                type: "POST",
+                url: "http://127.0.0.1:8000/api/ocr/",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.status === "success") {
+                        displayOutput(response);
+                    } else {
+                        alert("OCR failed. Please try again.");
+                    }
+                },
+                error: function(error) {
+                    console.error("Error:", error);
+                    alert("An error occurred. Please try again later.");
+                }
+            });
+        }
+
+        function displayOutput(response) {
+            var jsonOutput = JSON.stringify(response, null, 2);
+            $("#jsonOutput").text(jsonOutput);
+        }
+    </script>
+</body>
+</html>
