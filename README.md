@@ -3,6 +3,9 @@
 This project is a Thai ID OCR (Optical Character Recognition) application that extracts information from Thai ID cards using Google Vision API for OCR processing. The extracted data is stored in a MongoDB database, and the application provides a set of REST API endpoints for CRUD operations on OCR records.
 
 ## Setup
+For frontend you can visit templates folder in my repository-
+https://github.com/luck2406/Thai-ID-OCR-App
+
 
 ### Prerequisites
 
